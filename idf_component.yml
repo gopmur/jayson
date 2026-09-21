@@ -1,0 +1,6 @@
+description: "A memory safe C++ wrapper for cJSON for embedded usage"
+repository: "https://github.com/gopmur/jayson"
+version: "1.0.0"
+
+dependencies:
+  espressif/cjson: ^1.7.18
