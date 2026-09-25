@@ -36,6 +36,7 @@ class Json {
   Json(const Json& other);
   ~Json();
   std::string stringify();
+  static const char* get_json_error_string(JsonError error);
 };
 
 class JsonArray : public Json {

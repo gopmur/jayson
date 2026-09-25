@@ -35,6 +35,24 @@ Json::~Json() {
   this->release();
 }
 
+const char* Json::get_json_error_string(JsonError error) {
+  switch (error) {
+    case JsonError::NOT_PROVIDED:
+      return "not provided";
+    case JsonError::NOT_A_NUMBER:
+      return "not a number";
+    case JsonError::NOT_A_STRING:
+      return "not a string";
+    case JsonError::NOT_AN_OBJECT:
+      return "not an object";
+    case JsonError::NOT_AN_ARRAY:
+      return "not an array";
+    case JsonError::PARSE_ERROR:
+      return "parse error";
+  }
+  return "unkown";
+}
+
 JsonObject::JsonObject(cJSON* root, bool owned) : Json(root, owned) {}
 
 void Json::release() {
@@ -158,8 +176,9 @@ std::variant<JsonObject, JsonError> JsonObject::get_object(const char* name) {
   }
 }
 
-std::variant<JsonObject, JsonError> JsonObject::get_object(const char* name,
-                                                           JsonObject* error_object) {
+std::variant<JsonObject, JsonError> JsonObject::get_object(
+    const char* name,
+    JsonObject* error_object) {
   auto child_object = this->get_object(name);
   if (std::holds_alternative<JsonError>(child_object)) {
     error_object->set(name, std::get<JsonError>(child_object));
@@ -178,7 +197,9 @@ std::variant<double, JsonError> JsonObject::get_number(const char* name) {
   }
 }
 
-std::variant<double, JsonError> JsonObject::get_number(const char* name, JsonObject* error_object) {
+std::variant<double, JsonError> JsonObject::get_number(
+    const char* name,
+    JsonObject* error_object) {
   auto number = this->get_number(name);
   if (std::holds_alternative<JsonError>(number)) {
     error_object->set(name, std::get<JsonError>(number));
@@ -197,7 +218,9 @@ std::variant<char*, JsonError> JsonObject::get_string(const char* name) {
   }
 }
 
-std::variant<char*, JsonError> JsonObject::get_string(const char* name, JsonObject* error_object) {
+std::variant<char*, JsonError> JsonObject::get_string(
+    const char* name,
+    JsonObject* error_object) {
   auto string = this->get_string(name);
   if (std::holds_alternative<JsonError>(string)) {
     error_object->set(name, std::get<JsonError>(string));
